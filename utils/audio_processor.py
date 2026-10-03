@@ -66,8 +66,5 @@ def process_input(source:str)->list:
     print("Chunking Audio...")
     chunks=chunk_audio(wav_path)
     print(f"Audio Ready - len{chunks} created")
-
     return chunks
 
-result = process_input("https://www.youtube.com/watch?v=OJ0lheOVN00")
-print("Chunk paths:", result)
