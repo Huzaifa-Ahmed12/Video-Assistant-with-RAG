@@ -2,13 +2,24 @@
 transcription.py
 Transcribes a 16kHz mono WAV file using local Whisper.
 Handles long audio via chunking, language detection, and Urdu translation.
+GPU-accelerated when available (CUDA), falls back to CPU automatically.
 """
 
 import whisper
+import torch
 import json
 from pathlib import Path
 from pydub import AudioSegment
 from pydub.silence import detect_silence
+
+# ---------------------------------------------------------
+# 0. Device detection (GPU if available, else CPU)
+# ---------------------------------------------------------
+DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
+USE_FP16 = DEVICE == "cuda"   # fp16 only works correctly on GPU
+
+print(f"[transcription] Using device: {DEVICE} (fp16={USE_FP16})")
+
 
 # ---------------------------------------------------------
 # 1. Load the model once (reuse across requests)
@@ -18,10 +29,11 @@ _MODEL_CACHE = {}
 def load_model(model_size: str = "small"):
     """
     model_size: tiny, base, small, medium, large-v3
-    small/medium are a good speed-accuracy tradeoff for meetings.
+    On GPU you can comfortably use medium/large-v3.
+    On CPU, stick to small/base for reasonable speed.
     """
     if model_size not in _MODEL_CACHE:
-        _MODEL_CACHE[model_size] = whisper.load_model(model_size)
+        _MODEL_CACHE[model_size] = whisper.load_model(model_size, device=DEVICE)
     return _MODEL_CACHE[model_size]
 
 
@@ -97,7 +109,7 @@ def transcribe_chunk(model, chunk_path: Path, language: str | None,
         str(chunk_path),
         language=language,
         task=task,
-        fp16=False,          # True if running on GPU
+        fp16=USE_FP16,        # True on GPU, False on CPU
         verbose=False,
         word_timestamps=False,
     )
@@ -139,6 +151,7 @@ def transcribe_full(wav_path: Path, work_dir: Path,
 
     transcript = {
         "language": detected_lang,
+        "device": DEVICE,
         "segments": all_segments,
         "text": " ".join(full_text_parts),
     }
@@ -184,7 +197,10 @@ if __name__ == "__main__":
     work_dir = Path("work")
     work_dir.mkdir(exist_ok=True)
 
-    result = transcribe_full(wav_file, work_dir, model_size="small")
+    # On GPU you can bump this to "medium" or "large-v3"
+    model_size = "medium" if DEVICE == "cuda" else "small"
+
+    result = transcribe_full(wav_file, work_dir, model_size=model_size)
     save_transcript(result, work_dir / "transcript.json")
 
     print(f"Detected language: {result['language']}")
