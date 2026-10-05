@@ -23,7 +23,9 @@ def transcribe_chunk(chunk_path:str,translate:bool=False)->str:
     result=model.transcribe(
     chunk_path,
     task=task,
+    language="ur",
     temperature=0.0,
+    condition_on_previous_text=False
 )
 
     return result['text']
