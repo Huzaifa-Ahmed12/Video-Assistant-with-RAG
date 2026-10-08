@@ -50,3 +50,4 @@ def get_title(transcript:str)->str:
         RunnablePassthrough() | RunnableLambda(lambda x:{"text":x}) | title_prompt | llm |StrOutputParser()
     )
     return title_chain.invoke(transcript[:250])
+
