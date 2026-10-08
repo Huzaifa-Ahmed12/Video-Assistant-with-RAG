@@ -32,11 +32,6 @@ def summarize(transcript:str)->str:
         ("system","You are an expert meeting summarizer. Combine these partial summaries into one final bullet point summary"),
         ("human","{text}"),
     ])
-    combined_prompt=ChatPromptTemplate.from_messages([
-        ("system","You Are a expert meeting assistant. Your job is to combine these partial summaries into one complete bullet point summary accurately"),
-        ("human","{text}")
-    ])
-
     combined_chain=(
         RunnablePassthrough() | RunnableLambda(lambda x:{'text':x}) | combined_prompt | llm | StrOutputParser()
     )
