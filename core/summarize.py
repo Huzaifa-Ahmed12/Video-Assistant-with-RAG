@@ -7,7 +7,7 @@ from langchain_core.runnables import RunnablePassthrough, RunnableLambda
 import os
 
 def get_llm():
-    return ChatGoogleGenerativeAI(model="gemini-3.5-flash-lite",gemini_api_key=os.getenv("GEMINI_API_KEY"),temperature=0.3)
+    return ChatGoogleGenerativeAI(model="gemini-3.8-flash",google_api_key=os.getenv("GEMINI_API_KEY"))
 
 def split_transcript(transcript:str)->list:
     splitter=RecursiveCharacterTextSplitter(

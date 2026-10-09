@@ -6,7 +6,7 @@ from core.transcriber import transcribe_all
 from core.summarize import summarize, get_title
 from core.extractor import extract_action_items, extract_key_decision, extract_questions
 
-source="https://www.youtube.com/watch?v=YGgNBcIgI4s"
+source="https://www.youtube.com/watch?v=12JK4Q_6Pyo"
 
 chunks=process_input(source)
 transcript=transcribe_all(chunks)
