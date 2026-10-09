@@ -7,10 +7,9 @@ from core.summarize import summarize, get_title
 from core.extractor import extract_action_items, extract_key_decision, extract_questions
 
 source="https://www.youtube.com/watch?v=YGgNBcIgI4s"
-language="english"
 
 chunks=process_input(source)
-transcript=transcribe_all(chunks,language=language)
+transcript=transcribe_all(chunks)
 print("Transcript. \n")
 print(transcript)
 
