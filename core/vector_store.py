@@ -35,3 +35,17 @@ def build_vector_store(transcript:str)->Chroma:
     )
     return vector_store
     
+def load_vector_store()->Chroma:
+    embedding=get_embeddings()
+    vector_store=Chroma(
+        collection_name=COLLECTION_NAME,
+        embedding_function=embedding,
+        persist_directory=CHROMA_DIR
+    )
+    return vector_store
+
+def get_retriever(vector_store:Chroma, k:int=4):
+    return vector_store.as_retriever(
+        search_type='similarity',
+        search_kwargs={"k":k}
+    )
