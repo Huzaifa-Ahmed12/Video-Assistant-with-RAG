@@ -30,7 +30,7 @@ def run_pipeline(source: str):
     }
 
 if __name__ == "__main__":
-    video = "https://www.youtube.com/watch?v=12JK4Q_6Pyo"
+    video = ""
     source = video.strip()
     result = run_pipeline(source)
 
