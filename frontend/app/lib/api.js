@@ -1,6 +1,6 @@
 // MOCK DATA LAYER. Replace the bodies of these two functions with real
 // fetch() calls when your backend is ready. The UI will not need changes.
-
+// This is just the dummy data
 const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 
 export const STEPS = [
