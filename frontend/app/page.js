@@ -1,69 +1,72 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+"use client";
+
+import { useState } from "react";
+import { processSource } from "./lib/api";
+import SourceForm from "./components/source_form";
+import ProgressView from "./components/progress_view";
+import Results from "./components/results";
+import ChatPanel from "./components/chat_panel";
 
 export default function Home() {
+  const [stage, setStage] = useState("input"); // input | processing | ready
+  const [step, setStep] = useState(0);
+  const [error, setError] = useState("");
+  const [meeting, setMeeting] = useState(null);
+
+  async function handleSubmit(source) {
+    setError("");
+    setStep(0);
+    setStage("processing");
+    try {
+      const result = await processSource(source, setStep);
+      setMeeting(result);
+      setStage("ready");
+    } catch (e) {
+      setError(e.message || "Something went wrong. Please try again.");
+      setStage("input");
+    }
+  }
+
+  function reset() {
+    setMeeting(null);
+    setError("");
+    setStage("input");
+  }
+
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className={styles.intro}>
-          <h1>
-            To get started, edit the{" "}
-            <code className={styles.code}>page.js</code> file.
-          </h1>
-          <p>
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Learning
-            </a>{" "}
-            center.
+    <main className="page">
+      <header className="header">
+        <div className="logo">
+          <span className="logo-mark">▶</span>
+          <span>Video Assistant</span>
+        </div>
+        {stage === "ready" && (
+          <button className="btn btn-ghost" onClick={reset}>
+            + New video
+          </button>
+        )}
+      </header>
+
+      {stage === "input" && (
+        <section className="hero">
+          <h1>Turn any video into notes you can talk to</h1>
+          <p className="muted">
+            Paste a YouTube link or upload a recording. You'll get a transcript, a summary,
+            action items, and a chat that answers questions about it.
           </p>
-        </div>
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className={styles.secondary}
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+          {error && <div className="alert">{error}</div>}
+          <SourceForm onSubmit={handleSubmit} />
+        </section>
+      )}
+
+      {stage === "processing" && <ProgressView step={step} />}
+
+      {stage === "ready" && meeting && (
+        <section className="workspace">
+          <Results meeting={meeting} />
+          <ChatPanel />
+        </section>
+      )}
+    </main>
   );
 }

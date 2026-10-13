@@ -1,0 +1,47 @@
+// MOCK DATA LAYER. Replace the bodies of these two functions with real
+// fetch() calls when your backend is ready. The UI will not need changes.
+
+const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+
+export const STEPS = [
+  "Downloading and preparing audio",
+  "Transcribing speech",
+  "Writing the summary",
+  "Finding action items and decisions",
+  "Setting up chat",
+];
+
+// source = { url } or { file }
+// onStep(index) is called as each pipeline stage starts
+export async function processSource(source, onStep) {
+  for (let i = 0; i < STEPS.length; i++) {
+    onStep(i);
+    await wait(1400);
+  }
+
+  return {
+    title: source.file ? source.file.name : "Weekly Product Planning Meeting",
+    summary:
+      "The team reviewed progress on the new release and agreed to move the launch date by one week to finish testing.\n\nDesign shared the updated onboarding flow, and engineering raised concerns about the video upload size limit. Marketing will prepare announcement material once the date is confirmed.",
+    action_items: [
+      "Sara: finalize the onboarding screens by Friday",
+      "Ali: fix the upload size limit and report back next meeting",
+      "Hamza: draft the launch announcement",
+    ],
+    key_decisions: [
+      "The launch moves back by one week",
+      "Testing will focus on large video uploads first",
+    ],
+    open_questions: [
+      "Do we support files larger than 2 GB at launch?",
+      "Who approves the final announcement text?",
+    ],
+    transcript:
+      "Welcome everyone to the weekly planning meeting. Let's start with the release status. Testing is almost done, but we found a few issues with large uploads, so I propose we move the launch by a week...\n\n(Your real transcript text appears here.)",
+  };
+}
+
+export async function askQuestion(question) {
+  await wait(1200);
+  return `This is a sample answer to: "${question}"\n\nWhen the backend is connected, the answer will come from your RAG chain and be based on the actual transcript.`;
+}
