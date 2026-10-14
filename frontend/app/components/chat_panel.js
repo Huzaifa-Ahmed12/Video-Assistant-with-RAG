@@ -5,7 +5,7 @@ import { askQuestion } from "../lib/api";
 
 const SUGGESTIONS = ["What were the main points?", "List the action items", "What was decided?"];
 
-export default function ChatPanel() {
+export default function ChatPanel({meetingId}) {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
@@ -22,7 +22,7 @@ export default function ChatPanel() {
     setMessages((m) => [...m, { role: "user", text: q }]);
     setLoading(true);
     try {
-      const answer = await askQuestion(q);
+      const answer = await askQuestion(meetingId,q);
       setMessages((m) => [...m, { role: "bot", text: answer }]);
     } catch (e) {
       setMessages((m) => [

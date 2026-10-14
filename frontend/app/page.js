@@ -64,7 +64,7 @@ export default function Home() {
       {stage === "ready" && meeting && (
         <section className="workspace">
           <Results meeting={meeting} />
-          <ChatPanel />
+          <ChatPanel meetingId={meeting.meeting_id} />
         </section>
       )}
     </main>
