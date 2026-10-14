@@ -27,15 +27,13 @@ export async function processSource(source, onStep) {
       "No Backend, so no action items."
     ],
     key_decisions: [
-      "The launch moves back by one week",
-      "Testing will focus on large video uploads first",
+        "Also No key decisions for now."
     ],
     open_questions: [
-      "Do we support files larger than 2 GB at launch?",
-      "Who approves the final announcement text?",
+      "Currenlty No Open Questions."
     ],
     transcript:
-      "Welcome everyone to the weekly planning meeting. Let's start with the release status. Testing is almost done, but we found a few issues with large uploads, so I propose we move the launch by a week...\n\n(Your real transcript text appears here.)",
+    "No Transcript for now."
   };
 }
 
