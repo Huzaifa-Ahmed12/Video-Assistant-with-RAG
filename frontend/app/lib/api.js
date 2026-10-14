@@ -22,11 +22,9 @@ export async function processSource(source, onStep) {
   return {
     title: source.file ? source.file.name : "Weekly Product Planning Meeting",
     summary:
-      "The team reviewed progress on the new release and agreed to move the launch date by one week to finish testing.\n\nDesign shared the updated onboarding flow, and engineering raised concerns about the video upload size limit. Marketing will prepare announcement material once the date is confirmed.",
+    "Currently No summary Because no backend is connected.",
     action_items: [
-      "Sara: finalize the onboarding screens by Friday",
-      "Ali: fix the upload size limit and report back next meeting",
-      "Hamza: draft the launch announcement",
+      "No Backend, so no action items."
     ],
     key_decisions: [
       "The launch moves back by one week",
