@@ -30,7 +30,7 @@ export async function processSource(source, onStep) {
         "Also No key decisions for now."
     ],
     open_questions: [
-      "Currenlty No Open Questions."
+      "Currenlty No Open Questions, wait for backend."
     ],
     transcript:
     "No Transcript for now."
