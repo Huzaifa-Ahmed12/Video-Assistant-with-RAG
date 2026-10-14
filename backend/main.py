@@ -7,18 +7,31 @@ from core.rag_engine import build_rag_chain, ask_question
 
 load_dotenv()
 
-def run_pipeline(source: str):
+def run_pipeline(source: str, on_step=None):
+    def step(i):
+        if on_step:
+            on_step(i)
+
     print("Starting AI Video Assistant")
+    step(0)  # downloading and preparing audio
     chunks = process_input(source)
+
+    step(1)  # transcribing
     transcript = transcribe_all(chunks)
     print(f"Raw Transcription: \n {transcript}")
+
+    step(2)  # title and summary
     title = get_title(transcript)
     summary = summarize(transcript)
+
+    step(3)  # action items, decisions, questions
     action_items = extract_action_items(transcript)
     key_decisions = extract_key_decision(transcript)
     questions = extract_questions(transcript)
 
+    step(4)  # chat setup
     rag_chain = build_rag_chain(transcript)
+
     return {
         "title": title,
         "transcript": transcript,
@@ -26,7 +39,7 @@ def run_pipeline(source: str):
         "action_items": action_items,
         "key_decisions": key_decisions,
         "open_questions": questions,
-        "rag_chain": rag_chain
+        "rag_chain": rag_chain,
     }
 
 if __name__ == "__main__":
