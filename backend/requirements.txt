@@ -5,6 +5,11 @@ numpy>=1.26.0
 tiktoken>=0.7.0
 numba>=0.59.0
 more-itertools>=10.0.0
+
+# ---------- API ----------
+fastapi>=0.115.0
+uvicorn[standard]>=0.30.0
+python-multipart>=0.0.9
  
 # ---------- Audio / YouTube / URL handling ----------
 yt-dlp>=2024.8.6
