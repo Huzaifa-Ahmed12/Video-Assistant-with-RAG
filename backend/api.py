@@ -49,6 +49,9 @@ def run_job(job_id: str, source: str, temp_file: Path | None):
             job["status"] = "running"
             result = run_pipeline(source, on_step=lambda i: job.update(step=i))
 
+        for key in ("title","summary","transcript","action_items","key_decisions","open_questions"):
+            result[key]=str(result[key])
+
         meeting_id = uuid.uuid4().hex
         CHAINS[meeting_id] = result.pop("rag_chain")
         result["meeting_id"] = meeting_id

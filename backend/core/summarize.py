@@ -7,7 +7,7 @@ from langchain_core.runnables import RunnablePassthrough, RunnableLambda
 import os
 
 def get_llm():
-    return ChatGoogleGenerativeAI(model="gemini-2.5-flash-lite",google_api_key=os.getenv("GEMINI_API_KEY"))
+    return ChatGoogleGenerativeAI(model="gemini-3.5-flash-lite",google_api_key=os.getenv("GEMINI_API_KEY"))
 
 def split_transcript(transcript:str)->list:
     splitter=RecursiveCharacterTextSplitter(
@@ -49,5 +49,6 @@ def get_title(transcript:str)->str:
     title_chain=(
         RunnablePassthrough() | RunnableLambda(lambda x:{"text":x}) | title_prompt | llm |StrOutputParser()
     )
-    return title_chain.invoke(transcript[:250])
+    raw = title_chain.invoke(transcript[:250])
+    return raw.strip().strip('"').strip("'").strip()
 
